@@ -6,11 +6,20 @@ namespace Hasseware.Markdig.Renderers
     {
         protected override void Write(BlazorRenderer renderer, HeadingBlock heading)
         {
-            string elementName = $"h{heading.Level - 1}";
+            string elementName = $"h{heading.Level}";
 
             renderer.OpenElement(elementName);
             renderer.WriteAttributes(heading);
-            renderer.WriteLeafRawLines(heading);
+
+            if (heading.ProcessInlines)
+            {
+                renderer.Write(heading.Inline);
+            }
+            else
+            {
+                renderer.WriteLeafRawLines(heading);
+            }
+
             renderer.CloseElement();
         }
     }
