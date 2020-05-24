@@ -1,10 +1,11 @@
-﻿using System;
-using System.Text;
-using Hasseware.Markdig.Renderers;
+﻿using Hasseware.Markdig.Renderers;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
+using System;
+using System.Diagnostics;
+using System.Text;
 using MarkdownParser = Markdig.Markdown;
 
 namespace Hasseware.AspNetCore.Components
@@ -54,18 +55,20 @@ namespace Hasseware.AspNetCore.Components
                 if (i + 1 == step)
                 {
                     var pos = n;
-                    while (sb[n + 1] == ' ') n++;
+                    while (sb[pos + 1] == ' ') pos++;
 
                     i = 0;
-                    sb.Remove(pos + 1, n - pos);
+                    sb.Remove(n + 1, pos - n);
                 }
             }
+
+            Debug.WriteLine(sb.ToString());
 
             var pipeline  = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .Configure(Extensions)
                 .Build();
-
+            
             MarkdownParser.Convert(sb.ToString(), new BlazorRenderer(builder, 0), pipeline);
         }
     }

@@ -8,7 +8,7 @@ namespace Hasseware.Markdig.Renderers.Extensions
         {
             renderer.OpenElement("figcaption");
             renderer.WriteAttributes(caption);
-            renderer.Write(caption.Inline);
+            renderer.WriteChildren(caption.Inline);
             renderer.CloseElement();
         }
     }

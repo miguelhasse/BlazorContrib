@@ -13,7 +13,7 @@ namespace Hasseware.Markdig.Renderers
 
             if (paragraph.ProcessInlines)
             {
-                renderer.Write(paragraph.Inline);
+                renderer.WriteChildren(paragraph.Inline);
             }
             else
             {

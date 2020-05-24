@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using Hasseware.Markdig.Renderers.Extensions;
+using Hasseware.Markdig.Renderers.Inlines;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
 using Microsoft.AspNetCore.Components.Rendering;
-using Hasseware.Markdig.Renderers.Extensions;
-using Hasseware.Markdig.Renderers.Inlines;
+using System;
+using System.Linq;
 
 namespace Hasseware.Markdig.Renderers
 {

@@ -6,7 +6,7 @@ namespace Hasseware.Markdig.Renderers.Inlines
     {
         protected override void Write(BlazorRenderer renderer, CodeInline code)
         {
-            renderer.OpenElement("pre");
+            renderer.OpenElement("code");
             renderer.AddContent(code.Content);
             renderer.CloseElement();
         }

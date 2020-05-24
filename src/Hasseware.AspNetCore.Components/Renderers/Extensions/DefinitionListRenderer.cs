@@ -21,7 +21,7 @@ namespace Hasseware.Markdig.Renderers.Extensions
                     {
                         renderer.OpenElement("dt");
                         renderer.WriteAttributes(definitionTerm);
-                        renderer.Write(definitionTerm.Inline);
+                        renderer.WriteChildren(definitionTerm.Inline);
                         renderer.CloseElement();
                     }
                     else

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Markdig.Extensions.Tables;
+using System;
 using System.Globalization;
 using System.Linq;
-using Markdig.Extensions.Tables;
 
 namespace Hasseware.Markdig.Renderers.Extensions
 {
