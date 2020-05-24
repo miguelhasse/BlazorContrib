@@ -1,6 +1,5 @@
 ﻿using Markdig.Syntax.Inlines;
 
-
 namespace Hasseware.Markdig.Renderers.Inlines
 {
     internal class DelimiterInlineRenderer : BlazorObjectRenderer<DelimiterInline>

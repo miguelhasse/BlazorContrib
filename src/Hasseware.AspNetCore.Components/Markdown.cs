@@ -1,11 +1,10 @@
-﻿using Hasseware.Markdig.Renderers;
+﻿using System;
+using System.Text;
+using Hasseware.Markdig.Renderers;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
-using System;
-using System.Diagnostics;
-using System.Text;
 using MarkdownParser = Markdig.Markdown;
 
 namespace Hasseware.AspNetCore.Components
@@ -61,8 +60,6 @@ namespace Hasseware.AspNetCore.Components
                     sb.Remove(n + 1, pos - n);
                 }
             }
-
-            Debug.WriteLine(sb.ToString());
 
             var pipeline  = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()

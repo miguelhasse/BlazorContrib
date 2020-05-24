@@ -49,6 +49,7 @@ namespace Hasseware.Markdig.Renderers
             ObjectRenderers.Add(new FootnoteLinkRenderer());
             ObjectRenderers.Add(new JiraLinksRenderer());
             ObjectRenderers.Add(new MathBlockRenderer());
+            ObjectRenderers.Add(new MathInlineRenderer());
             ObjectRenderers.Add(new TableRenderer());
             ObjectRenderers.Add(new TaskListRenderer());
             ObjectRenderers.Add(new YamlFrontMatterRenderer());
@@ -82,9 +83,10 @@ namespace Hasseware.Markdig.Renderers
 
         public BlazorRenderer Write(StringSlice slice)
         {
-            if (slice.Start < slice.End)
+            if (slice.Start <= slice.End)
             {
-                AddMarkupContent(new string(slice.Text.AsSpan(slice.Start, slice.End - slice.Start + 1)));
+                var value = slice.Text.AsSpan(slice.Start, slice.End - slice.Start + 1);
+                AddMarkupContent(new string(value));
             }
 
             return this;
@@ -92,9 +94,10 @@ namespace Hasseware.Markdig.Renderers
 
         public BlazorRenderer WriteAttribute(string name, StringSlice slice)
         {
-            if (slice.Start < slice.End)
+            if (slice.Start <= slice.End)
             {
-                AddAttribute(name, new string(slice.Text.AsSpan(slice.Start, slice.End - slice.Start + 1)));
+                var value = slice.Text.AsSpan(slice.Start, slice.End - slice.Start + 1);
+                AddAttribute(name, new string(value));
             }
 
             return this;
