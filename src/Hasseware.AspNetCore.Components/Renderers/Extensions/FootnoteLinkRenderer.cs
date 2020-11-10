@@ -12,7 +12,7 @@ namespace Hasseware.Markdig.Renderers.Extensions
             {
                 renderer.AddAttribute("class", "footnote-back-ref");
                 renderer.AddAttribute("href", $"#fnref:{link.Index}");
-                renderer.AddContent("&#8617;");
+                renderer.AddMarkupContent("&#8617;");
             }
             else
             {
