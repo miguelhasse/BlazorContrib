@@ -6,9 +6,7 @@ namespace Hasseware.Markdig.Renderers.Extensions
     {
         protected override void Write(BlazorRenderer renderer, TaskList list)
         {
-            renderer.OpenElement("span");
-            renderer.AddMarkupContent(list.Checked ? "&#128505;" : "&#9744;");
-            renderer.CloseElement();
+            renderer.AddContent(list.Checked ? "[x]" : "[ ]");
         }
     }
 }

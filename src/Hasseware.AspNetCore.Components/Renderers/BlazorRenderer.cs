@@ -1,23 +1,27 @@
-﻿using Hasseware.Markdig.Renderers.Extensions;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Hasseware.Markdig.Renderers.Extensions;
 using Hasseware.Markdig.Renderers.Inlines;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
-using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Linq;
 
 namespace Hasseware.Markdig.Renderers
 {
-    public class BlazorRenderer : RendererBase
+    internal class BlazorRenderer : RendererBase
     {
         private readonly RenderTreeBuilder _builder;
+        private readonly NavigationManager _navigation;
         private int _sequence;
 
-        public BlazorRenderer(RenderTreeBuilder builder, int sequence)
+        public BlazorRenderer(RenderTreeBuilder builder, NavigationManager navigation, int sequence)
         {
             this._builder = builder;
+            this._navigation = navigation;
             this._sequence = sequence;
 
             ObjectRenderers.Add(new CodeBlockRenderer());
@@ -65,21 +69,35 @@ namespace Hasseware.Markdig.Renderers
             return this._builder;
         }
 
-        internal void AddAttribute(string name, string value) => this._builder.AddAttribute(this._sequence++, name, value);
+        public void OpenElement(string elementName) => this._builder.OpenElement(this._sequence++, elementName);
 
-        internal void AddAttribute(string name, bool value) => this._builder.AddAttribute(this._sequence++, name, value);
+        public void CloseElement() => this._builder.CloseElement();
 
-        internal void AddAttribute(string name, object value) => this._builder.AddAttribute(this._sequence++, name, value);
+        public void AddAttribute(string name, string value) => this._builder.AddAttribute(this._sequence++, name, value);
 
-        internal void AddContent(string textContent) => this._builder.AddContent(this._sequence++, textContent);
+        public void AddAttribute(string name, bool value) => this._builder.AddAttribute(this._sequence++, name, value);
 
-        internal void AddContent(object textContent) => this._builder.AddContent(this._sequence++, textContent);
+        public void AddAttribute(string name, object value) => this._builder.AddAttribute(this._sequence++, name, value);
 
-        internal void AddMarkupContent(string markupContent) => this._builder.AddMarkupContent(this._sequence++, markupContent);
+        public void AddContent(string textContent) => this._builder.AddContent(this._sequence++, textContent);
 
-        internal void CloseElement() => this._builder.CloseElement();
+        public void AddContent(object textContent) => this._builder.AddContent(this._sequence++, textContent);
 
-        internal void OpenElement(string elementName) => this._builder.OpenElement(this._sequence++, elementName);
+        public void AddMarkupContent(string markupContent) => this._builder.AddMarkupContent(this._sequence++, markupContent);
+
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Reviewed")]
+        public void AddUriAttribute(string name, string value)
+        {
+            if (_navigation != null
+                && Uri.TryCreate(_navigation.Uri, UriKind.Absolute, out Uri currentUri)
+                && Uri.TryCreate(currentUri, value, out Uri finalUri))
+            {
+                try { value = _navigation.ToBaseRelativePath(finalUri.AbsoluteUri); }
+                catch { }
+            }
+
+            this._builder.AddAttribute(this._sequence++, name, value);
+        }
 
         public BlazorRenderer Write(StringSlice slice)
         {

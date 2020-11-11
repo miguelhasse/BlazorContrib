@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Hasseware.Markdig.Renderers;
-using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
+using Hasseware.Markdig.Renderers;
+using Markdig;
+
 using MarkdownParser = Markdig.Markdown;
 
 namespace Hasseware.AspNetCore.Components
@@ -17,7 +19,10 @@ namespace Hasseware.AspNetCore.Components
         [Parameter]
         public string Extensions { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "BL0006:Do not use RenderTree types", Justification = "Reviewed")]
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
+
+        [SuppressMessage("Usage", "BL0006:Do not use RenderTree types", Justification = "Reviewed")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             var childBuilder = new RenderTreeBuilder();
@@ -61,12 +66,12 @@ namespace Hasseware.AspNetCore.Components
                 }
             }
 
-            var pipeline  = new MarkdownPipelineBuilder()
+            var pipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .Configure(Extensions)
                 .Build();
             
-            MarkdownParser.Convert(sb.ToString(), new BlazorRenderer(builder, 0), pipeline);
+            MarkdownParser.Convert(sb.ToString(), new BlazorRenderer(builder, NavigationManager, 0), pipeline);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Hasseware.Markdig.Renderers.Inlines
             else
             {
                 renderer.OpenElement("a");
-                renderer.AddAttribute("href", url);
+                renderer.AddUriAttribute("href", url);
             }
 
             if (!string.IsNullOrEmpty(link.Title))
