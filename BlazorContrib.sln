@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorMarkdown", "samples\BlazorMarkdown.csproj", "{83DDA473-88ED-45C4-851A-89FC80248217}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Components", "src\Hasseware.AspNetCore.Components\Hasseware.AspNetCore.Components.csproj", "{E2DB142C-0C26-4EA8-B818-29171369BF5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Components.Markdown", "src\Markdown\Hasseware.AspNetCore.Components.Markdown.csproj", "{E2DB142C-0C26-4EA8-B818-29171369BF5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Components.Forms", "src\Hasseware.AspNetCore.Components.Forms\Hasseware.AspNetCore.Components.Forms.csproj", "{3B2B3F87-524F-4476-991A-897249EBB8A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Components.Forms", "src\Forms\Hasseware.AspNetCore.Components.Forms.csproj", "{3B2B3F87-524F-4476-991A-897249EBB8A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{43593D1F-9ED9-4373-8A68-ADEB6B825F8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83DDA473-88ED-45C4-851A-89FC80248217} = {43593D1F-9ED9-4373-8A68-ADEB6B825F8A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {26C42087-982B-4AC8-A780-112BB85828F7}
