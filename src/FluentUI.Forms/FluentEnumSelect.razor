@@ -1,0 +1,9 @@
+@typeparam TEnum
+@inherits FluentInputBase<TEnum>
+
+<FluentSelect @bind-Value="CurrentValueAsString" TOption="TEnum" Id="@Id" Label="@Label" AriaLabel="@AriaLabel" Class="@Class" Disabled="@Disabled" Required="@Required" AdditionalAttributes="@AdditionalAttributes">
+	@foreach (var value in Enum.GetValues(GetEnumType()))
+	{
+		<FluentOption Value="@value?.ToString()">@GetDisplayName(value)</FluentOption>
+	}
+</FluentSelect>

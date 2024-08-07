@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Compon
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{43593D1F-9ED9-4373-8A68-ADEB6B825F8A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.FluentUI.AspNetCore.Components.Forms", "src\FluentUI.Forms\Hasseware.FluentUI.AspNetCore.Components.Forms.csproj", "{A3458E0F-22B4-4DCD-BDC1-F7577763890B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{3B2B3F87-524F-4476-991A-897249EBB8A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B2B3F87-524F-4476-991A-897249EBB8A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B2B3F87-524F-4476-991A-897249EBB8A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3458E0F-22B4-4DCD-BDC1-F7577763890B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3458E0F-22B4-4DCD-BDC1-F7577763890B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3458E0F-22B4-4DCD-BDC1-F7577763890B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3458E0F-22B4-4DCD-BDC1-F7577763890B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

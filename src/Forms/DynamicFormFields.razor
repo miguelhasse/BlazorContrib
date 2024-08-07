@@ -1,0 +1,20 @@
+@inherits OwningComponentBase
+
+@if (Fields != null)
+{
+    foreach (var field in Fields.OrderBy(p => p.Order))
+    {
+        if (FieldTemplate != null)
+        {
+            @FieldTemplate(field)
+        }
+        else
+        {
+            <div>
+                <label for="@field.EditorId">@field.DisplayName</label>
+                @field.EditorTemplate
+                @field.FieldValidationTemplate
+            </div>
+        }
+    }
+}

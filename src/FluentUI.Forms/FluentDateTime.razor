@@ -1,0 +1,63 @@
+@typeparam TValue
+@inherits FluentInputBase<TValue>
+
+<FluentInputLabel ForId="@Id" Label="@Label" AriaLabel="@AriaLabel" ChildContent="@LabelTemplate" Required="@Required" />
+<FluentStack Orientation="@Orientation">
+@if (Type == InputDateType.Date || Type == InputDateType.DateTimeLocal)
+{
+    <FluentTextField Id="@Id"
+                     Embedded="true"
+                     Class="@ClassValue"
+                     Style="@StyleValue"
+                     AutoComplete="off"
+                     Autofocus="@Autofocus"
+                     Appearance="@Appearance"
+                     @bind-Value="@CurrentValueAsString"
+                     @onclick="@OnCalendarOpenHandlerAsync"
+                     ReadOnly="@ReadOnly"
+                     Disabled="@Disabled"
+                     Required="@Required"
+                     Placeholder="@(Placeholder ?? PlaceholderAccordingToView())"
+                     Name="@Name"
+                     @attributes="@AdditionalAttributes">
+        @((MarkupString)FluentDatePicker.CalendarIcon)
+    </FluentTextField>
+}
+@if (Type == InputDateType.Time || Type == InputDateType.DateTimeLocal)
+{
+    <fluent-text-field class="@($"{ClassValue} fluent-timepicker")"
+                       style="@StyleValue"
+                       id="@Id"
+                       autofocus="@Autofocus"
+                       appearance="@Appearance.ToAttributeValue()"
+                       type="time"
+                       current-value="@CurrentTimeAsString"
+                       @onchange="@ChangeHandlerAsync"
+                       @oninput="@InputHandlerAsync"
+                       readonly="@ReadOnly"
+                       disabled="@Disabled"
+                       required="@Required"
+                       name="@Name"
+                       placeholder="@Placeholder"
+                       @attributes="@AdditionalAttributes" />
+}
+</FluentStack>
+@if (Opened)
+{
+    <FluentOverlay @bind-Visible="@Opened" Dismissable="true" FullScreen="true" />
+    <FluentAnchoredRegion Anchor="@Id"
+                          HorizontalDefaultPosition="@HorizontalPosition.Right"
+                          HorizontalInset="true"
+                          VerticalDefaultPosition="@VerticalPosition.Unset"
+                          Shadow="ElevationShadow.Flyout"
+                          Class="fluent-datepicker-popup"
+                          Style="@($"z-index: {ZIndex.DatePickerPopup}; border-radius: calc(var(--control-corner-radius) * 1px); padding: 12px;")">
+        <FluentCalendar Culture="@Culture"
+                        View="@View"
+                        DayFormat="@DayFormat"
+                        DisabledDateFunc="@DisabledDateFunc"
+                        DisabledSelectable="@DisabledSelectable"
+                        Value="@CurrentDateTime"
+                        ValueChanged="@OnSelectedDateAsync" />
+    </FluentAnchoredRegion>
+}
