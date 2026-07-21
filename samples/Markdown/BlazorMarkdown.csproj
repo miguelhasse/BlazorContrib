@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Markdown\Hasseware.AspNetCore.Components.Markdown.csproj" />
+    <ProjectReference Include="..\..\src\Markdown\Hasseware.AspNetCore.Components.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

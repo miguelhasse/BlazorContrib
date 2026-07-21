@@ -10,6 +10,19 @@ It references the library project directly and exposes a few pages with progress
 - `/sample1` exercises headings, blockquotes, lists, inline code, and links.
 - `/sample2` demonstrates more advanced content including tables, definition lists, footnotes, images, and mathematics.
 
+## Real-world scenarios per page
+
+- `/` is the best starting point for the common "docs page" scenario: task lists and code
+  blocks are typical for changelogs or contributor guides, and emoji shortcodes show how the
+  `Extensions` string can be extended beyond `UseAdvancedExtensions()`.
+- `/sample1` covers link- and quote-heavy content such as blog posts or release notes, and is a
+  good reference for the indentation-trimming behavior described in the Markdown package README
+  when content is nested inside other Razor markup.
+- `/sample2` is the edge-case showcase: definition lists, footnotes, and math together
+  demonstrate the custom renderers under `Renderers/Extensions` and how multiple Markdig
+  extensions can be combined in a single `Extensions` string (see the Markdown package README's
+  "Combining footnotes, math, and YAML front matter" section).
+
 ## Run the sample
 
 From the solution root:

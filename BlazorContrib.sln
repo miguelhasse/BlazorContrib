@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorMarkdown", "samples\BlazorMarkdown.csproj", "{83DDA473-88ED-45C4-851A-89FC80248217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorMarkdown", "samples\Markdown\BlazorMarkdown.csproj", "{83DDA473-88ED-45C4-851A-89FC80248217}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hasseware.AspNetCore.Components.Markdown", "src\Markdown\Hasseware.AspNetCore.Components.Markdown.csproj", "{E2DB142C-0C26-4EA8-B818-29171369BF5F}"
 EndProject

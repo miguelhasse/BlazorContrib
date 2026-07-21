@@ -56,3 +56,17 @@ The Markdown component accepts Markdown content as `ChildContent`, parses it wit
 
 - The libraries currently target `.NET 10.0`.
 - The sample app demonstrates the Markdown package today; the forms packages are library-focused building blocks.
+
+## Real-world scenarios
+
+Each project README now documents concrete edge cases in more depth; a few highlights:
+
+- **Forms** (`src\Forms\README.md`): validating nested objects/collections with
+  `RecursiveAnnotationsValidator`, and the `[Flags]` enum fallback to a plain `InputText`.
+- **Fluent UI Forms** (`src\FluentUI.Forms\README.md`): the `Required` inference rule (only
+  applied when a field is both annotated `[Required]`/`[Key]` and not `Disabled`), and using
+  `UIHintAttribute` to select a specific Fluent editor per presentation layer.
+- **Markdown** (`src\Markdown\README.md`): how leading indentation from Razor markup is
+  stripped before parsing, and the `+`/`-` syntax for enabling or disabling individual Markdig
+  extensions through the `Extensions` parameter.
+

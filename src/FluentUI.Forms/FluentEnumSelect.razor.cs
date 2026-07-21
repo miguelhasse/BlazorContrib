@@ -9,7 +9,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms;
 
 [CascadingTypeParameter(nameof(TEnum))]
-public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum>
+public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum> where TEnum : Enum
 {
 	protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TEnum result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
@@ -17,7 +17,7 @@ public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum>
         if (BindConverter.TryConvertTo(value, CultureInfo.CurrentCulture, out TEnum? parsedValue))
         {
             result = parsedValue!;
-            validationErrorMessage = "";
+            validationErrorMessage = string.Empty;
             return true;
         }
 
@@ -28,7 +28,7 @@ public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum>
             if (nullableType != null)
             {
                 result = default!;
-                validationErrorMessage = "";
+                validationErrorMessage = string.Empty;
                 return true;
             }
         }

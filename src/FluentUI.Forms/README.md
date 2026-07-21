@@ -51,3 +51,69 @@ Choose this project if:
 - you need the specialized `FluentDateTime`, `FluentEnumSelect`, or `FluentUrlOrGuid` components directly
 
 If you want generated fields with standard Blazor components instead, use the base package in `src\Forms`.
+
+## Real-world examples and edge cases
+
+### `Required` is inferred, not just copied from annotations
+
+`FluentFormFieldProvider` only sets `Required="true"` when the field is **not** `Disabled` and
+is annotated with `RequiredAttribute` or `KeyAttribute`. A disabled required field will not show
+as required in the UI, which matters for wizard-style forms where some fields are conditionally
+disabled:
+
+```csharp
+[Display(Name = "Order number", Order = 1)]
+[Required, Key]
+public string? OrderNumber { get; set; }
+```
+
+```razor
+<EditForm Model="@model">
+    <DynamicFormFields Disabled="@isReadOnlyMode" PresentationLayer="FluentUI" />
+</EditForm>
+```
+
+When `isReadOnlyMode` is `true`, the `OrderNumber` field renders disabled and without the
+required indicator, even though the property itself is still `[Required]`.
+
+### Combining length constraints on the same property
+
+`StringLengthAttribute` takes precedence over `MinLengthAttribute`/`MaxLengthAttribute` when
+both are present; the provider prefers `StringLengthAttribute.MinimumLength`/`MaximumLength` and
+only falls back to the separate attributes if `StringLengthAttribute` is absent:
+
+```csharp
+[Display(Name = "Nickname")]
+[StringLength(20, MinimumLength = 2)]
+public string? Nickname { get; set; }
+
+[Display(Name = "Bio")]
+[MinLength(0), MaxLength(500)]
+public string? Bio { get; set; }
+```
+
+Both examples map to a `FluentTextField`/`FluentTextArea` with `Minlength`/`Maxlength`
+parameters populated from whichever attribute supplied the value.
+
+### Selecting a specific Fluent editor with `UIHintAttribute`
+
+Combine `UIHintAttribute` with an `EditorAttribute` targeting `FluentInputBase<>` to pick a
+particular Fluent component for a presentation layer without writing a custom provider:
+
+```csharp
+[Display(Name = "Country")]
+[UIHint("FluentUI")]
+[Editor(typeof(FluentCountryPicker), typeof(FluentInputBase<>))]
+public string? CountryCode { get; set; }
+```
+
+The provider only honors the `EditorAttribute` whose `EditorTypeName` starts with the given
+`UIHint`, so the same property could resolve to a different custom editor for a different
+presentation layer.
+
+### `[Flags]` enums fall back to a plain text field
+
+As with the base Forms package, `FluentFormFieldProvider` skips `FluentEnumSelect<TEnum>` for
+enums marked `[Flags]` and falls back to `FluentTextField`. If you need a multi-select editor
+for bit-combined flag values, register a custom `IDynamicFormFieldProvider` (or a `UIHint` +
+`EditorAttribute` override as shown above) that recognizes `[Flags]` enum types.
