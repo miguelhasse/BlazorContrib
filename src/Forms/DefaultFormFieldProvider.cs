@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace Hasseware.AspNetCore.Components.Forms;
 

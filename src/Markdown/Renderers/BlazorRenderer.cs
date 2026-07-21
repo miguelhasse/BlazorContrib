@@ -1,19 +1,57 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Hasseware.Markdig.Renderers.Extensions;
+﻿using Hasseware.Markdig.Renderers.Extensions;
 using Hasseware.Markdig.Renderers.Inlines;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Hasseware.Markdig.Renderers
 {
     internal class BlazorRenderer : RendererBase
     {
+        // All the renderer instances below are stateless (they only take the BlazorRenderer and the
+        // MarkdownObject being written as parameters), so a single shared set is reused across every
+        // BlazorRenderer instance instead of allocating ~25 new objects on every component render.
+        private static readonly IMarkdownObjectRenderer[] _sharedRenderers =
+        [
+            new CodeBlockRenderer(),
+            new ListRenderer(),
+            new HeadingRenderer(),
+            new HtmlBlockRenderer(),
+            new ParagraphRenderer(),
+            new QuoteBlockRenderer(),
+            new ThematicBreakRenderer(),
+
+            // Default inline renderers
+            new AutolinkInlineRenderer(),
+            new CodeInlineRenderer(),
+            new DelimiterInlineRenderer(),
+            new EmphasisInlineRenderer(),
+            new LineBreakInlineRenderer(),
+            new HtmlInlineRenderer(),
+            new HtmlEntityInlineRenderer(),
+            new LinkInlineRenderer(),
+            new LiteralInlineRenderer(),
+
+            //Extension renderers
+            new AbbreviationRenderer(),
+            new DefinitionListRenderer(),
+            new FigureCaptionRenderer(),
+            new FigureRenderer(),
+            new FooterBlockRenderer(),
+            new FootnoteGroupRenderer(),
+            new FootnoteLinkRenderer(),
+            new JiraLinksRenderer(),
+            new MathBlockRenderer(),
+            new MathInlineRenderer(),
+            new TableRenderer(),
+            new TaskListRenderer(),
+            new YamlFrontMatterRenderer(),
+        ];
+
         private readonly RenderTreeBuilder _builder;
         private readonly NavigationManager _navigation;
         private int _sequence;
@@ -24,39 +62,8 @@ namespace Hasseware.Markdig.Renderers
             this._navigation = navigation;
             this._sequence = sequence;
 
-            ObjectRenderers.Add(new CodeBlockRenderer());
-            ObjectRenderers.Add(new ListRenderer());
-            ObjectRenderers.Add(new HeadingRenderer());
-            ObjectRenderers.Add(new HtmlBlockRenderer());
-            ObjectRenderers.Add(new ParagraphRenderer());
-            ObjectRenderers.Add(new QuoteBlockRenderer());
-            ObjectRenderers.Add(new ThematicBreakRenderer());
-
-            // Default inline renderers
-            ObjectRenderers.Add(new AutolinkInlineRenderer());
-            ObjectRenderers.Add(new CodeInlineRenderer());
-            ObjectRenderers.Add(new DelimiterInlineRenderer());
-            ObjectRenderers.Add(new EmphasisInlineRenderer());
-            ObjectRenderers.Add(new LineBreakInlineRenderer());
-            ObjectRenderers.Add(new HtmlInlineRenderer());
-            ObjectRenderers.Add(new HtmlEntityInlineRenderer());
-            ObjectRenderers.Add(new LinkInlineRenderer());
-            ObjectRenderers.Add(new LiteralInlineRenderer());
-
-            //Extension renderers
-            ObjectRenderers.Add(new AbbreviationRenderer());
-            ObjectRenderers.Add(new DefinitionListRenderer());
-            ObjectRenderers.Add(new FigureCaptionRenderer());
-            ObjectRenderers.Add(new FigureRenderer());
-            ObjectRenderers.Add(new FooterBlockRenderer());
-            ObjectRenderers.Add(new FootnoteGroupRenderer());
-            ObjectRenderers.Add(new FootnoteLinkRenderer());
-            ObjectRenderers.Add(new JiraLinksRenderer());
-            ObjectRenderers.Add(new MathBlockRenderer());
-            ObjectRenderers.Add(new MathInlineRenderer());
-            ObjectRenderers.Add(new TableRenderer());
-            ObjectRenderers.Add(new TaskListRenderer());
-            ObjectRenderers.Add(new YamlFrontMatterRenderer());
+            foreach (var renderer in _sharedRenderers)
+                ObjectRenderers.Add(renderer);
         }
 
         public override object Render(MarkdownObject markdownObject)

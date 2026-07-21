@@ -1,7 +1,5 @@
 ﻿using Markdig.Extensions.Tables;
-using System;
 using System.Globalization;
-using System.Linq;
 
 namespace Hasseware.Markdig.Renderers.Extensions
 {

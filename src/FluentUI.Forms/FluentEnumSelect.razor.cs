@@ -1,17 +1,21 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Reflection;
 
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms;
 
 [CascadingTypeParameter(nameof(TEnum))]
 public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum> where TEnum : Enum
 {
-	protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TEnum result, [NotNullWhen(false)] out string? validationErrorMessage)
+    // The value -> display-name mapping is fixed for a given closed TEnum type, so it is computed
+    // once (via this per-closed-generic-type static field) instead of reflecting on every render.
+    private static readonly Lazy<IReadOnlyDictionary<object, string?>> _displayNames = new(BuildDisplayNames);
+
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TEnum result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         // Let's Blazor convert the value for us 😊
         if (BindConverter.TryConvertTo(value, CultureInfo.CurrentCulture, out TEnum? parsedValue))
@@ -47,16 +51,29 @@ public partial class FluentEnumSelect<TEnum> : FluentInputBase<TEnum> where TEnu
         if (value is null)
             return null;
 
-        // Read the Display attribute name
-        var valueAsString = value.ToString();
+        return _displayNames.Value.TryGetValue(value, out var displayName) ? displayName : value.ToString();
+    }
 
-        if (valueAsString is not null)
+    // Build the value -> display-name map once per closed TEnum type
+    private static IReadOnlyDictionary<object, string?> BuildDisplayNames()
+    {
+        var enumType = GetEnumType();
+        var map = new Dictionary<object, string?>();
+
+        foreach (var value in Enum.GetValues(enumType))
         {
-            var member = value.GetType().GetMember(valueAsString)[0];
-            return member.GetCustomAttribute<DisplayAttribute>()?.GetName();
+            var valueAsString = value.ToString();
+            string? displayName = valueAsString;
+
+            if (valueAsString is not null && enumType.GetMember(valueAsString) is [var member, ..])
+            {
+                displayName = member.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? displayName;
+            }
+
+            map[value] = displayName;
         }
 
-		return valueAsString;
+        return map;
     }
 
     // Get the actual enum type. It unwrap Nullable<T> if needed

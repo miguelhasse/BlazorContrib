@@ -1,16 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Rendering;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components;
 
 namespace Hasseware.AspNetCore.Components.Forms;
 
 // Note that adding a constraint on TEnum (where T : Enum) doesn't work when used in the view, Razor raises an error at build time. Also, this would prevent using nullable types...
 public sealed class InputEnumSelect<TEnum> : InputBase<TEnum>
 {
+    // The value -> display-name mapping is fixed for a given closed TEnum type, so it is computed
+    // once (via this per-closed-generic-type static field) instead of reflecting on every render.
+    private static readonly Lazy<IReadOnlyDictionary<object, string?>> _displayNames = new(BuildDisplayNames);
+
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
         builder.OpenElement(0, "select");
@@ -68,17 +72,30 @@ public sealed class InputEnumSelect<TEnum> : InputBase<TEnum>
         if (value is null)
             return null;
 
-        // Read the Display attribute name
-        var valueAsString = value.ToString();
-        if (valueAsString is not null)
+        return _displayNames.Value.TryGetValue(value, out var displayName) ? displayName : value.ToString();
+    }
+
+    // Build the value -> display-name map once per closed TEnum type
+    private static IReadOnlyDictionary<object, string?> BuildDisplayNames()
+    {
+        var enumType = GetEnumType();
+        var map = new Dictionary<object, string?>();
+
+        foreach (var value in Enum.GetValues(enumType))
         {
-            var member = value.GetType().GetMember(valueAsString)[0];
-            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
-            if (displayAttribute is not null)
-                return displayAttribute.GetName();
+            var valueAsString = value.ToString();
+            string? displayName = valueAsString;
+
+            if (valueAsString is not null && enumType.GetMember(valueAsString) is [var member, ..]
+                && member.GetCustomAttribute<DisplayAttribute>() is { } displayAttribute)
+            {
+                displayName = displayAttribute.GetName();
+            }
+
+            map[value] = displayName;
         }
 
-        return valueAsString;
+        return map;
     }
 
     // Get the actual enum type. It unwrap Nullable<T> if needed

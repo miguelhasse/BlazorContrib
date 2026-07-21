@@ -1,12 +1,12 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.FluentUI.AspNetCore.Components;
-using Microsoft.FluentUI.AspNetCore.Components.Utilities;
 using Microsoft.FluentUI.AspNetCore.Components.Extensions;
+using Microsoft.FluentUI.AspNetCore.Components.Utilities;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms;
 
@@ -25,108 +25,108 @@ public partial class FluentDateTime<TValue> : FluentInputBase<TValue>
 
     private TValue? _selectedDate = default!;
 
-	protected override string? StyleValue => new StyleBuilder(Style).Build();
+    protected override string? StyleValue => new StyleBuilder(Style).Build();
 
-	protected override string? ClassValue => new CssBuilder(base.ClassValue).AddClass("fluent-datepicker").Build();
+    protected override string? ClassValue => new CssBuilder(base.ClassValue).AddClass("fluent-datepicker").Build();
 
-	public bool Opened { get; set; } = false;
+    public bool Opened { get; set; } = false;
 
-	protected DateTime? CurrentDateTime => ValueAsDateTime(CurrentValue);
+    protected DateTime? CurrentDateTime => ValueAsDateTime(CurrentValue);
 
     protected string? CurrentTimeAsString => ValueAsDateTime(CurrentValue)?.ToString("HH:mm");
 
     [Parameter]
-	public virtual FluentInputAppearance Appearance { get; set; } = FluentInputAppearance.Outline;
+    public virtual FluentInputAppearance Appearance { get; set; } = FluentInputAppearance.Outline;
 
-	[Parameter]
-	public virtual bool DisabledSelectable { get; set; } = true;
+    [Parameter]
+    public virtual bool DisabledSelectable { get; set; } = true;
 
-	/// <summary>
-	/// Gets or sets the Type style for the day (numeric or 2-digits).
-	/// </summary>
-	[Parameter]
-	public DayFormat? DayFormat { get; set; } = Microsoft.FluentUI.AspNetCore.Components.DayFormat.Numeric;
+    /// <summary>
+    /// Gets or sets the Type style for the day (numeric or 2-digits).
+    /// </summary>
+    [Parameter]
+    public DayFormat? DayFormat { get; set; } = Microsoft.FluentUI.AspNetCore.Components.DayFormat.Numeric;
 
-	/// <summary>
-	/// Gets or sets the verification to do when the selected value has changed.
-	/// By default, ValueChanged is called only if the selected value has changed.
-	/// </summary>
-	[Parameter]
-	public bool CheckIfSelectedValueHasChanged { get; set; } = true;
+    /// <summary>
+    /// Gets or sets the verification to do when the selected value has changed.
+    /// By default, ValueChanged is called only if the selected value has changed.
+    /// </summary>
+    [Parameter]
+    public bool CheckIfSelectedValueHasChanged { get; set; } = true;
 
-	/// <summary>
-	/// Defines the appearance of the <see cref="FluentCalendar"/> component.
-	/// </summary>
-	[Parameter]
-	public virtual CalendarViews View { get; set; } = CalendarViews.Days;
+    /// <summary>
+    /// Defines the appearance of the <see cref="FluentCalendar"/> component.
+    /// </summary>
+    [Parameter]
+    public virtual CalendarViews View { get; set; } = CalendarViews.Days;
 
 
-	[Parameter]
-	public virtual CultureInfo Culture { get; set; } = CultureInfo.CurrentCulture;
+    [Parameter]
+    public virtual CultureInfo Culture { get; set; } = CultureInfo.CurrentCulture;
 
     [Parameter]
     public Orientation Orientation { get; set; } = Orientation.Horizontal;
 
     [Parameter]
-	public InputDateType Type { get; set; } = InputDateType.DateTimeLocal;
+    public InputDateType Type { get; set; } = InputDateType.DateTimeLocal;
 
     [Parameter]
-	public string ParsingErrorMessage { get; set; } = default!;
+    public string ParsingErrorMessage { get; set; } = default!;
 
-	public override TValue? Value
-	{
-		get
-		{
-			return _selectedDate;
-		}
-		set
-		{
-			if (CheckIfSelectedValueHasChanged && object.Equals(_selectedDate, value))
-			{
-				return;
-			}
-  
+    public override TValue? Value
+    {
+        get
+        {
+            return _selectedDate;
+        }
+        set
+        {
+            if (CheckIfSelectedValueHasChanged && object.Equals(_selectedDate, value))
+            {
+                return;
+            }
+
             _selectedDate = value;
 
-			if (ValueChanged.HasDelegate)
-			{
-				ValueChanged.InvokeAsync(value);
-			}
-			if (ValueExpression != null || ValueChanged.HasDelegate)
-			{
-				EditContext?.NotifyFieldChanged(FieldIdentifier);
-			}
-		}
-	}
+            if (ValueChanged.HasDelegate)
+            {
+                ValueChanged.InvokeAsync(value);
+            }
+            if (ValueExpression != null || ValueChanged.HasDelegate)
+            {
+                EditContext?.NotifyFieldChanged(FieldIdentifier);
+            }
+        }
+    }
 
     [Parameter]
     public virtual Func<DateTime, bool>? DisabledDateFunc { get; set; }
 
     [Parameter]
-	public EventCallback<bool> OnCalendarOpen { get; set; }
+    public EventCallback<bool> OnCalendarOpen { get; set; }
 
-	protected override string FormatValueAsString(TValue? value) => value switch
-	{
-		DateTime dateTimeValue => BindConverter.FormatValue(dateTimeValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
-		DateTimeOffset dateTimeOffsetValue => BindConverter.FormatValue(dateTimeOffsetValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
-		DateOnly dateOnlyValue => BindConverter.FormatValue(dateOnlyValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
-		TimeOnly timeOnlyValue => BindConverter.FormatValue(timeOnlyValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
-		_ => string.Empty,// Handles null for Nullable<DateTime>, etc.
-	};
+    protected override string FormatValueAsString(TValue? value) => value switch
+    {
+        DateTime dateTimeValue => BindConverter.FormatValue(dateTimeValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
+        DateTimeOffset dateTimeOffsetValue => BindConverter.FormatValue(dateTimeOffsetValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
+        DateOnly dateOnlyValue => BindConverter.FormatValue(dateOnlyValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
+        TimeOnly timeOnlyValue => BindConverter.FormatValue(timeOnlyValue, Culture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture),
+        _ => string.Empty,// Handles null for Nullable<DateTime>, etc.
+    };
 
-	/// <inheritdoc />
-	protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TValue result, [NotNullWhen(false)] out string? validationErrorMessage)
-	{
+    /// <inheritdoc />
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out TValue result, [NotNullWhen(false)] out string? validationErrorMessage)
+    {
         if (View == CalendarViews.Years && int.TryParse(value, out var year))
         {
             value = new DateTime(year, 1, 1).ToString(Culture.DateTimeFormat.ShortDatePattern);
         }
-        
-		if (value != null && TimeOnly.TryParse(value, out var valueConverted))
+
+        if (value != null && TimeOnly.TryParse(value, out var valueConverted))
         {
             result = DateTimeAsValue((ValueAsDateTime(Value) ?? DateTime.MinValue).Date.Add(valueConverted.ToTimeSpan()));
-			validationErrorMessage = null;
-			return true;
+            validationErrorMessage = null;
+            return true;
         }
 
         if (BindConverter.TryConvertTo(value, CultureInfo.InvariantCulture, out result))
@@ -136,9 +136,9 @@ public partial class FluentDateTime<TValue> : FluentInputBase<TValue>
             return true;
         }
 
-		validationErrorMessage = string.Format(CultureInfo.CurrentCulture, ParsingErrorMessage, FieldIdentifier.FieldName);
-		return false;
-	}
+        validationErrorMessage = string.Format(CultureInfo.CurrentCulture, ParsingErrorMessage, FieldIdentifier.FieldName);
+        return false;
+    }
 
     protected Task OnCalendarOpenHandlerAsync(MouseEventArgs _)
     {
@@ -173,10 +173,10 @@ public partial class FluentDateTime<TValue> : FluentInputBase<TValue>
     {
         var type = Nullable.GetUnderlyingType(typeof(TValue)) ?? typeof(TValue);
 
-		if (value != null)
-		{
-			if (type == typeof(DateTimeOffset))
-				return (TValue)(object)new DateTimeOffset(value.Value);
+        if (value != null)
+        {
+            if (type == typeof(DateTimeOffset))
+                return (TValue)(object)new DateTimeOffset(value.Value);
 
             if (type == typeof(DateOnly))
                 return (TValue)(object)value.ToDateOnly();
@@ -187,15 +187,15 @@ public partial class FluentDateTime<TValue> : FluentInputBase<TValue>
             return (TValue)(object)value.Value;
         }
 
-		return default!;
+        return default!;
     }
 
     private string PlaceholderAccordingToView() => View switch
-	{
-		CalendarViews.Years => "yyyy",
-		CalendarViews.Months => Culture.DateTimeFormat.YearMonthPattern,
-		_ => Culture.DateTimeFormat.ShortDatePattern
-	};
+    {
+        CalendarViews.Years => "yyyy",
+        CalendarViews.Months => Culture.DateTimeFormat.YearMonthPattern,
+        _ => Culture.DateTimeFormat.ShortDatePattern
+    };
 
     private static DateTime? ValueAsDateTime(TValue? value) => value switch
     {

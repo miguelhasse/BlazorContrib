@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics;
-using System.Globalization;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.AspNetCore.Components;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Hasseware.AspNetCore.Components.Forms;
 
@@ -29,9 +29,9 @@ public class InputUrlOrGuid<TValue> : InputBase<TValue>
     {
         return value switch
         {
-			string str => str,
-			Uri uri => uri.ToString(),
-			Guid guid => guid.ToString(),
+            string str => str,
+            Uri uri => uri.ToString(),
+            Guid guid => guid.ToString(),
             _ => string.Empty,// Handles null for Nullable<DateTime>, etc.
         };
     }
@@ -42,15 +42,15 @@ public class InputUrlOrGuid<TValue> : InputBase<TValue>
         var targetType = typeof(TValue);
 
         bool success;
-		if (targetType == typeof(string))
-		{
-			success = TryParseString(value, out result);
-		}
-		else if (targetType == typeof(Uri))
-		{
-			success = TryParseUri(value, out result);
-		}
-		else if(targetType == typeof(Guid) || targetType == typeof(Guid?))
+        if (targetType == typeof(string))
+        {
+            success = TryParseString(value, out result);
+        }
+        else if (targetType == typeof(Uri))
+        {
+            success = TryParseUri(value, out result);
+        }
+        else if (targetType == typeof(Guid) || targetType == typeof(Guid?))
         {
             success = Guid.TryParse(value, out var guid);
             result = success ? (TValue)(object)guid : default;
@@ -73,31 +73,31 @@ public class InputUrlOrGuid<TValue> : InputBase<TValue>
         }
     }
 
-	private static bool TryParseString(string? value, out TValue? result)
-	{
-		if (value is not null)
-		{
-			result = (TValue)(object)value;
-			return true;
-		}
-		else
-		{
-			result = default;
-			return false;
-		}
-	}
+    private static bool TryParseString(string? value, out TValue? result)
+    {
+        if (value is not null)
+        {
+            result = (TValue)(object)value;
+            return true;
+        }
+        else
+        {
+            result = default;
+            return false;
+        }
+    }
 
-	private static bool TryParseUri(string? value, out TValue? result)
-	{
-		if (Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
-		{
-			result = (TValue)(object)uri;
-			return true;
-		}
-		else
-		{
-			result = default;
-			return false;
-		}
-	}
+    private static bool TryParseUri(string? value, out TValue? result)
+    {
+        if (Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
+        {
+            result = (TValue)(object)uri;
+            return true;
+        }
+        else
+        {
+            result = default;
+            return false;
+        }
+    }
 }

@@ -1,18 +1,22 @@
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace Hasseware.AspNetCore.Components.Forms;
 
 /// <summary>
 /// Adds custom Data Annotations validation support to an <see cref="EditContext"/>.
 /// </summary>
-public class RecursiveAnnotationsValidator : ComponentBase
+public class RecursiveAnnotationsValidator : ComponentBase, IDisposable
 {
     private static readonly ConcurrentDictionary<(Type ModelType, string FieldName), PropertyInfo> _propertyInfoCache = new();
+
+    private EditContext? _subscribedEditContext;
+    private EventHandler<ValidationRequestedEventArgs>? _validationRequestedHandler;
+    private EventHandler<FieldChangedEventArgs>? _fieldChangedHandler;
 
     [CascadingParameter]
     public EditContext CurrentEditContext { get; set; } = default!;
@@ -33,11 +37,33 @@ public class RecursiveAnnotationsValidator : ComponentBase
         var editContext = this.CurrentEditContext;
         var messages = new ValidationMessageStore(editContext);
 
+        _validationRequestedHandler = (sender, eventArgs) => ValidateModel((EditContext)sender!, messages, this.ServiceProvider);
+        _fieldChangedHandler = (sender, eventArgs) => ValidateField(editContext, messages, this.ServiceProvider, eventArgs.FieldIdentifier);
+
         // Perform object-level validation on request
-        editContext.OnValidationRequested += (sender, eventArgs) => ValidateModel((EditContext)sender!, messages, this.ServiceProvider);
+        editContext.OnValidationRequested += _validationRequestedHandler;
 
         // Perform per-field validation on each field edit
-        editContext.OnFieldChanged += (sender, eventArgs) => ValidateField(editContext, messages, this.ServiceProvider, eventArgs.FieldIdentifier);
+        editContext.OnFieldChanged += _fieldChangedHandler;
+
+        _subscribedEditContext = editContext;
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        if (_subscribedEditContext != null)
+        {
+            if (_validationRequestedHandler != null)
+                _subscribedEditContext.OnValidationRequested -= _validationRequestedHandler;
+
+            if (_fieldChangedHandler != null)
+                _subscribedEditContext.OnFieldChanged -= _fieldChangedHandler;
+
+            _subscribedEditContext = null;
+        }
+
+        GC.SuppressFinalize(this);
     }
 
     private static void ValidateModel(EditContext editContext, ValidationMessageStore messages, IServiceProvider serviceProvider)

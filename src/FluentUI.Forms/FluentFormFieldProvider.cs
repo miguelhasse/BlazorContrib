@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using Hasseware.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.FluentUI.AspNetCore.Components;
-using Hasseware.AspNetCore.Components.Forms;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms;
 
@@ -25,7 +25,7 @@ public class FluentFormFieldProvider : IDynamicFormFieldProvider
             parameters[param.Key] = param.Value!;
         }
 
-        if (parameters["Disabled"] is false 
+        if (parameters["Disabled"] is false
             && (field.Property.GetCustomAttribute<RequiredAttribute>() is not null
             || field.Property.GetCustomAttribute<KeyAttribute>() is not null))
         {
@@ -56,7 +56,7 @@ public class FluentFormFieldProvider : IDynamicFormFieldProvider
             parameters["Maxlength"] = maxlength;
         }
 
-        if (field.Property.GetCustomAttribute<RangeAttribute>() is {} range)
+        if (field.Property.GetCustomAttribute<RangeAttribute>() is { } range)
         {
             if (range.Minimum is not null)
             {

@@ -1,9 +1,9 @@
 ﻿
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics;
-using System.Globalization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms;
 
@@ -27,9 +27,9 @@ public partial class FluentUrlOrGuid<TValue> : FluentInputBase<TValue>
     {
         return value switch
         {
-			string str => str,
-			Uri uri => uri.ToString(),
-			Guid guid => guid.ToString(),
+            string str => str,
+            Uri uri => uri.ToString(),
+            Guid guid => guid.ToString(),
             _ => string.Empty,// Handles null for Nullable<DateTime>, etc.
         };
     }
@@ -40,15 +40,15 @@ public partial class FluentUrlOrGuid<TValue> : FluentInputBase<TValue>
         var targetType = typeof(TValue);
 
         bool success;
-		if (targetType == typeof(string))
-		{
-			success = TryParseString(value, out result);
-		}
-		else if (targetType == typeof(Uri))
-		{
-			success = TryParseUri(value, out result);
-		}
-		else if(targetType == typeof(Guid) || targetType == typeof(Guid?))
+        if (targetType == typeof(string))
+        {
+            success = TryParseString(value, out result);
+        }
+        else if (targetType == typeof(Uri))
+        {
+            success = TryParseUri(value, out result);
+        }
+        else if (targetType == typeof(Guid) || targetType == typeof(Guid?))
         {
             success = Guid.TryParse(value, out var guid);
             result = success ? (TValue)(object)guid : default;
@@ -71,27 +71,27 @@ public partial class FluentUrlOrGuid<TValue> : FluentInputBase<TValue>
         }
     }
 
-	private static bool TryParseString(string? value, out TValue? result)
-	{
-		if (value is not null)
-		{
-			result = (TValue)(object)value;
-			return true;
-		}
+    private static bool TryParseString(string? value, out TValue? result)
+    {
+        if (value is not null)
+        {
+            result = (TValue)(object)value;
+            return true;
+        }
 
-		result = default;
-		return false;
-	}
+        result = default;
+        return false;
+    }
 
-	private static bool TryParseUri(string? value, out TValue? result)
-	{
-		if (Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
-		{
-			result = (TValue)(object)uri;
-			return true;
-		}
+    private static bool TryParseUri(string? value, out TValue? result)
+    {
+        if (Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out var uri))
+        {
+            result = (TValue)(object)uri;
+            return true;
+        }
 
-		result = default;
-		return false;
-	}
+        result = default;
+        return false;
+    }
 }

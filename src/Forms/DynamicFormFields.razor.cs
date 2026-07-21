@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Hasseware.AspNetCore.Components.Forms;
 
@@ -38,7 +38,7 @@ public partial class DynamicFormFields : OwningComponentBase
     public EventCallback<object> OnModelChanged { get; set; }
 
     [Parameter]
-    public RenderFragment<DynamicFormField>? FieldTemplate { get; set; }   
+    public RenderFragment<DynamicFormField>? FieldTemplate { get; set; }
 
     protected override void OnParametersSet()
     {
