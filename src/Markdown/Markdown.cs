@@ -69,8 +69,8 @@ namespace Hasseware.AspNetCore.Components
                 }
             }
 
-            var pipeline = _pipelineCache.GetOrAdd(Extensions ?? string.Empty, static extensions =>
-                new MarkdownPipelineBuilder().UseAdvancedExtensions().Configure(extensions).Build());
+            var pipeline = _pipelineCache.GetOrAdd(Extensions ?? string.Empty,
+                static extensions => new MarkdownPipelineBuilder().Configure(extensions).Build());
 
             MarkdownParser.Convert(sb.ToString(), new BlazorRenderer(builder, NavigationManager, 0), pipeline);
         }

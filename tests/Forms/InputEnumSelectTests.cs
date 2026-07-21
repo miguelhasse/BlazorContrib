@@ -1,6 +1,6 @@
+using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Bunit;
 using Xunit;
 
 namespace Hasseware.AspNetCore.Components.Forms.Tests;

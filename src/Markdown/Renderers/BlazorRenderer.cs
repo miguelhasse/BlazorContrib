@@ -17,6 +17,12 @@ namespace Hasseware.Markdig.Renderers
         // BlazorRenderer instance instead of allocating ~25 new objects on every component render.
         private static readonly IMarkdownObjectRenderer[] _sharedRenderers =
         [
+            // MathBlockRenderer and YamlFrontMatterRenderer must be registered before
+            // CodeBlockRenderer: MathBlock derives from FencedCodeBlock and YamlFrontMatterBlock
+            // derives from CodeBlock, and renderer lookup picks the first registered renderer
+            // whose type is assignable from the object's type.
+            new MathBlockRenderer(),
+            new YamlFrontMatterRenderer(),
             new CodeBlockRenderer(),
             new ListRenderer(),
             new HeadingRenderer(),
@@ -29,6 +35,10 @@ namespace Hasseware.Markdig.Renderers
             new AutolinkInlineRenderer(),
             new CodeInlineRenderer(),
             new DelimiterInlineRenderer(),
+            // CustomContainerInlineRenderer must be registered before EmphasisInlineRenderer:
+            // CustomContainerInline derives from EmphasisInline, and renderer lookup picks the
+            // first registered renderer whose type is assignable from the object's type.
+            new CustomContainerInlineRenderer(),
             new EmphasisInlineRenderer(),
             new LineBreakInlineRenderer(),
             new HtmlInlineRenderer(),
@@ -38,6 +48,7 @@ namespace Hasseware.Markdig.Renderers
 
             //Extension renderers
             new AbbreviationRenderer(),
+            new CustomContainerRenderer(),
             new DefinitionListRenderer(),
             new FigureCaptionRenderer(),
             new FigureRenderer(),
@@ -45,11 +56,10 @@ namespace Hasseware.Markdig.Renderers
             new FootnoteGroupRenderer(),
             new FootnoteLinkRenderer(),
             new JiraLinksRenderer(),
-            new MathBlockRenderer(),
             new MathInlineRenderer(),
+            new SmartyPantRenderer(),
             new TableRenderer(),
             new TaskListRenderer(),
-            new YamlFrontMatterRenderer(),
         ];
 
         private readonly RenderTreeBuilder _builder;

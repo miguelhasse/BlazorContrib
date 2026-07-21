@@ -1,8 +1,7 @@
+using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FluentUI.AspNetCore.Components;
-using Bunit;
 using Xunit;
 
 namespace Hasseware.FluentUI.AspNetCore.Components.Forms.Tests;
