@@ -22,11 +22,35 @@ namespace Hasseware.Markdig.Renderers.Inlines
 
         private string GetDefaultTag(EmphasisInline obj)
         {
-            if (obj.DelimiterChar == '*' || obj.DelimiterChar == '_')
+            switch (obj.DelimiterChar)
             {
-                return obj.DelimiterCount == 2 ? "strong" : "em";
+                case '*':
+                case '_':
+                    return obj.DelimiterCount == 2 ? "strong" : "em";
+
+                // EmphasisExtras: ~~strike~~ / ~sub~
+                case '~':
+                    return obj.DelimiterCount == 2 ? "del" : "sub";
+
+                // EmphasisExtras: ^sup^
+                case '^':
+                    return "sup";
+
+                // EmphasisExtras: ++insert++
+                case '+':
+                    return "ins";
+
+                // EmphasisExtras: ==mark==
+                case '=':
+                    return "mark";
+
+                // Citations: ""citation""
+                case '"':
+                    return "cite";
+
+                default:
+                    return null;
             }
-            return null;
         }
     }
 }

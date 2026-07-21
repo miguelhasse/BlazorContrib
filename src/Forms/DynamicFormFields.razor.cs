@@ -59,7 +59,12 @@ public partial class DynamicFormFields : OwningComponentBase
 
         if (CurrentEditContext.Model != null)
         {
-            Fields = DynamicFormField.Create(this);
+            // Materialize the sequence: DynamicFormField.Create is a lazy iterator, and each
+            // enumeration of it would otherwise create a brand-new, distinct set of DynamicFormField
+            // instances. Without this, the instances subscribed to OnValueChanged below would differ
+            // from the instances actually rendered in the .razor markup (which enumerates Fields again),
+            // so OnModelChanged would never fire in response to a rendered field's edits.
+            Fields = DynamicFormField.Create(this).ToList();
 
             foreach (var field in Fields)
             {
