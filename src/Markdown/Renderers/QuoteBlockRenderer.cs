@@ -9,14 +9,21 @@ namespace Hasseware.Markdig.Renderers
         {
             if (quote is AlertBlock alert)
             {
-                var kind = alert.Kind.ToString().ToUpperInvariant();
+                var kind = alert.Kind.AsSpan();
+                Span<char> buffer = stackalloc char[kind.Length];
+
+                kind.ToLowerInvariant(buffer);
+                var cssClass = $"markdown-alert markdown-alert-{buffer}";
+
+                kind.ToUpperInvariant(buffer);
+                var title = buffer.ToString();
 
                 renderer.OpenElement("div");
-                renderer.AddAttribute("class", $"markdown-alert markdown-alert-{kind.ToLowerInvariant()}");
+                renderer.AddAttribute("class", cssClass);
 
                 renderer.OpenElement("p");
                 renderer.AddAttribute("class", "markdown-alert-title");
-                renderer.AddContent(kind);
+                renderer.AddContent(title);
                 renderer.CloseElement();
 
                 renderer.WriteChildren(alert);
