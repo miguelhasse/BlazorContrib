@@ -28,6 +28,9 @@ namespace Hasseware.AspNetCore.Components
         [SuppressMessage("Usage", "BL0006:Do not use RenderTree types", Justification = "Reviewed")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
+            if (ChildContent is null)
+                return;
+
             var childBuilder = new RenderTreeBuilder();
             ChildContent(childBuilder);
 
